@@ -51,7 +51,39 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return response()->json($post->with('user')->withCount('comments'));
+        return response()->json([
+            'id'=>$post->id,
+            'slug'=>$post->slug,
+            'body'=>$post->body,
+            'added_at'=>$post->created_at,
+            'comments_count'=>$post->comments->count(),
+            'image'=>$post->image,
+            'user'=>$post->user,
+            'title'=>$post->title,
+            'category'=>$post->category,
+            'comments'=>$post->comments->map(function ($comment) {
+                return [
+                    'id'=>$comment->id,
+                    'body'=>$comment->body,
+                    'user'=>$comment->user,
+                    'added_at'=>$comment->created_at->diffForHumans()
+                ];
+            })
+
+           /*  'comments'=>$this->commentsFormatted($post->comments) */
+        ]);
+    }
+    public function commentsFormatted($comments){
+         $new_comments = [];
+         foreach($comments as $comment){
+             array_push($new_comments,[
+                 'id'=>$comment->id,
+                 'body'=>$comment->body,
+                 'user'=>$comment->user,
+                 'added_at'=>$comment->created_at->diffForHumans()
+             ]);
+         }
+         return $new_comments;
     }
 
     /**

@@ -8,11 +8,11 @@
       />
       <div class="media-body">
         <h4 class="mt-0">
-<router-link :to="'/posts/'+posts">
-Title
-</router-link>
-            <a :href="'/posts/'+post.slug">title</a></h4>
-        {{ post.body.substr(0,150) }}
+          <router-link :to="'/post/' + post.slug">
+            {{ post.title }}
+          </router-link>
+        </h4>
+        {{ post.body.substr(0, 150) }}
         <ul class="list-inline list-unstyled d-flex post-info">
           <li>
             <span
