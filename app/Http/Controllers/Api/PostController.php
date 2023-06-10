@@ -70,7 +70,7 @@ class PostController extends Controller
                 ];
             })
 
-           /*  'comments'=>$this->commentsFormatted($post->comments) */
+            
         ]);
     }
     public function commentsFormatted($comments){
