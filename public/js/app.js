@@ -5369,7 +5369,8 @@ __webpack_require__.r(__webpack_exports__);
     searchPost: function searchPost(query) {
       var _this = this;
       if (query.length > 0) {
-        axios.get("/api/getpost/" + query).then(function (res) {
+        this.issearching = true;
+        axios.get("/api/getpost/" + query + '?page=1').then(function (res) {
           _this.issearching = false, _this.posts = res.data;
           _this.issearching = false;
         })["catch"](function (err) {});

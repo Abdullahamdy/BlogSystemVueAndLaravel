@@ -94,8 +94,9 @@ class PostController extends Controller
         $posts = Post::where('title', 'LIKE', "%".$query ."%")
             ->withCount(['comments'])
             ->with('user')
-            ->latest()
-            ->get();
+            ->latest();
+            $nbrows = count($posts->get());
+            $posts = $posts->paginate(intval($nbrows));
         return response()->json($posts);
     }
 

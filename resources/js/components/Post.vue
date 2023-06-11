@@ -84,8 +84,9 @@ export default {
   watch: {
     searchPost(query) {
       if (query.length > 0) {
+        this.issearching = true;
         axios
-          .get("/api/getpost/" + query)
+          .get("/api/getpost/" + query+'?page=1')
           .then((res) => {
             (this.issearching = false), (this.posts = res.data);
             this.issearching = false;
