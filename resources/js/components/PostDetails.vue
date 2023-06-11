@@ -153,10 +153,8 @@ export default {
       axios
         .get("/api/posts/" + this.$route.params.slug)
         .then((res) => {
-          console.log(res.data);
           this.PostDetails = res.data;
-        })
-        .then((err) => {});
+        });
     },
   },
 };

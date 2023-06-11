@@ -4,15 +4,15 @@
  <!-- Page Content -->
  <div class="container intro-container">
 
-    <div class="row">
+     <global-home></global-home>
+    {{-- <div class="row"> --}}
 
       <!-- Blog Entries Column -->
-      <div class="col-md-8">
+      {{-- <div class="col-md-8">
 
         <h1 class="my-4">Page Heading
           <small>Secondary Text</small>
         </h1>
-        <global-home></global-home>
         <!-- Pagination -->
         <nav aria-label="...">
           <ul class="pagination float-right">
@@ -33,10 +33,10 @@
           </ul>
         </nav>
 
-      </div>
+      </div> --}}
 
       <!-- Sidebar Widgets Column -->
-      <div class="col-md-4">
+      {{-- <div class="col-md-4">
 
         <!-- Search Widget -->
         <div class="card my-4">
@@ -88,9 +88,9 @@
         </div>
 
 
-      </div>
+      </div> --}}
 
-    </div>
+    {{-- </div> --}}
     <!-- /.row -->
 
   </div>
