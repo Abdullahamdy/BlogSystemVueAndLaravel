@@ -1,10 +1,8 @@
 <template>
   <div class="row">
-    <div class="col-md-8" v-if="issearching">
-         searching....
-    </div>
+    <div class="col-md-8" v-if="issearching">searching....</div>
     <div class="col-md-8" v-else>
-      <div class="media simple-post" v-for="post in posts" :key="post.id">
+      <div class="media simple-post" v-for="post in posts.data" :key="post.id">
         <img
           class="mr-3"
           :src="'/img/' + post.image"
@@ -36,6 +34,10 @@
           </ul>
         </div>
       </div>
+      <pagination
+        :data="posts"
+        @pagination-change-page="getPosts"
+      ></pagination>
     </div>
     <div class="col-md-4">
       <!-- Search Widget -->
@@ -64,54 +66,51 @@
 
 <script>
 import Categories from "./Categories.vue";
+
 export default {
   name: "Post",
   data() {
     return {
       posts: {},
-      singlepost:{},
+      singlepost: {},
       searchPost: "",
       issearching: false,
     };
   },
+
   components: {
     Categories,
   },
   watch: {
     searchPost(query) {
-        if(query.length > 0){
-            axios.get('/api/getpost/'+query).then((res)=>{
-                this.issearching = false,
-                this.posts = res.data;
-                this.issearching = false;
-            }).catch(err=>{
-
-            })
-
-        }else{
-
-         let oldposts =  JSON.parse( localStorage.getItem('posts'));
-         this.posts = oldposts;
-        }
-
-
-
-
+      if (query.length > 0) {
+        axios
+          .get("/api/getpost/" + query)
+          .then((res) => {
+            (this.issearching = false), (this.posts = res.data);
+            this.issearching = false;
+          })
+          .catch((err) => {});
+      } else {
+        let oldposts = JSON.parse(localStorage.getItem("posts"));
+        this.posts = oldposts;
+      }
     },
   },
   mounted() {
     this.getPosts();
   },
   methods: {
-    getPosts() {
+    getPosts(page = 1) {
       axios
-        .get("/api/posts")
+        .get("/api/posts?page="+page)
         .then((res) => {
           this.posts = res.data;
-          localStorage.setItem('posts',JSON.stringify(this.posts))
+          localStorage.setItem("posts", JSON.stringify(this.posts));
         })
         .then((err) => console.log(err));
     },
+
   },
 };
 </script>

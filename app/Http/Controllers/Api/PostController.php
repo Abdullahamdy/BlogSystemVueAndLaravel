@@ -19,7 +19,7 @@ class PostController extends Controller
         $posts = Post::with(['user'])
             ->withCount(['comments'])
             ->latest()
-            ->get();
+            ->paginate(1);
         return response()->json($posts);
     }
 
