@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -70,7 +71,7 @@ class PostController extends Controller
                 ];
             })
 
-            
+
         ]);
     }
     public function commentsFormatted($comments){
@@ -118,5 +119,15 @@ class PostController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function categoryPost($slug){
+       $category =  Category::whereSlug($slug)->first();
+       $posts = Post::whereCategoryId($category->id)->with('user')->get();
+       foreach($posts as $post){
+        $post->setAttribute('comments_count',$post->comments->count());
+       }
+
+          return response()->json($posts);
     }
 }

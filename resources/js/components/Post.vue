@@ -53,7 +53,7 @@
       </div>
 
       <!-- Categories Widget -->
-      <Categories></Categories>
+      <Categories></categories>
     </div>
   </div>
 </template>
