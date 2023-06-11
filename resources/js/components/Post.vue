@@ -1,6 +1,9 @@
 <template>
   <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-8" v-if="issearching">
+         searching....
+    </div>
+    <div class="col-md-8" v-else>
       <div class="media simple-post" v-for="post in posts" :key="post.id">
         <img
           class="mr-3"
@@ -44,6 +47,7 @@
               type="text"
               class="form-control"
               placeholder="Search for..."
+              v-model="searchPost"
             />
             <span class="input-group-btn">
               <button class="btn btn-secondary" type="button">Go!</button>
@@ -53,7 +57,7 @@
       </div>
 
       <!-- Categories Widget -->
-      <Categories></categories>
+      <Categories></Categories>
     </div>
   </div>
 </template>
@@ -65,10 +69,35 @@ export default {
   data() {
     return {
       posts: {},
+      singlepost:{},
+      searchPost: "",
+      issearching: false,
     };
   },
   components: {
     Categories,
+  },
+  watch: {
+    searchPost(query) {
+        if(query.length > 0){
+            axios.get('/api/getpost/'+query).then((res)=>{
+                this.issearching = false,
+                this.posts = res.data;
+                this.issearching = false;
+            }).catch(err=>{
+
+            })
+
+        }else{
+
+         let oldposts =  JSON.parse( localStorage.getItem('posts'));
+         this.posts = oldposts;
+        }
+
+
+
+
+    },
   },
   mounted() {
     this.getPosts();
@@ -79,6 +108,7 @@ export default {
         .get("/api/posts")
         .then((res) => {
           this.posts = res.data;
+          localStorage.setItem('posts',JSON.stringify(this.posts))
         })
         .then((err) => console.log(err));
     },

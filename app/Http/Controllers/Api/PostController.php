@@ -17,9 +17,9 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::with(['user'])
-        ->withCount(['comments'])
-        ->latest()
-        ->get();
+            ->withCount(['comments'])
+            ->latest()
+            ->get();
         return response()->json($posts);
     }
 
@@ -53,38 +53,50 @@ class PostController extends Controller
     public function show(Post $post)
     {
         return response()->json([
-            'id'=>$post->id,
-            'slug'=>$post->slug,
-            'body'=>$post->body,
-            'added_at'=>$post->created_at,
-            'comments_count'=>$post->comments->count(),
-            'image'=>$post->image,
-            'user'=>$post->user,
-            'title'=>$post->title,
-            'category'=>$post->category,
-            'comments'=>$post->comments->map(function ($comment) {
+            'id' => $post->id,
+            'slug' => $post->slug,
+            'body' => $post->body,
+            'added_at' => $post->created_at,
+            'comments_count' => $post->comments->count(),
+            'image' => $post->image,
+            'user' => $post->user,
+            'title' => $post->title,
+            'category' => $post->category,
+            'comments' => $post->comments->map(function ($comment) {
                 return [
-                    'id'=>$comment->id,
-                    'body'=>$comment->body,
-                    'user'=>$comment->user,
-                    'added_at'=>$comment->created_at->diffForHumans()
+                    'id' => $comment->id,
+                    'body' => $comment->body,
+                    'user' => $comment->user,
+                    'added_at' => $comment->created_at->diffForHumans()
                 ];
             })
 
 
         ]);
     }
-    public function commentsFormatted($comments){
-         $new_comments = [];
-         foreach($comments as $comment){
-             array_push($new_comments,[
-                 'id'=>$comment->id,
-                 'body'=>$comment->body,
-                 'user'=>$comment->user,
-                 'added_at'=>$comment->created_at->diffForHumans()
-             ]);
-         }
-         return $new_comments;
+    public function commentsFormatted($comments)
+    {
+        $new_comments = [];
+        foreach ($comments as $comment) {
+            array_push($new_comments, [
+                'id' => $comment->id,
+                'body' => $comment->body,
+                'user' => $comment->user,
+                'added_at' => $comment->created_at->diffForHumans()
+            ]);
+        }
+        return $new_comments;
+    }
+
+
+    public function getPost($query)
+    {
+        $posts = Post::where('title', 'LIKE', "%".$query ."%")
+            ->withCount(['comments'])
+            ->with('user')
+            ->latest()
+            ->get();
+        return response()->json($posts);
     }
 
     /**
@@ -121,13 +133,14 @@ class PostController extends Controller
         //
     }
 
-    public function categoryPost($slug){
-       $category =  Category::whereSlug($slug)->first();
-       $posts = Post::whereCategoryId($category->id)->with('user')->get();
-       foreach($posts as $post){
-        $post->setAttribute('comments_count',$post->comments->count());
-       }
+    public function categoryPost($slug)
+    {
+        $category =  Category::whereSlug($slug)->first();
+        $posts = Post::whereCategoryId($category->id)->with('user')->get();
+        foreach ($posts as $post) {
+            $post->setAttribute('comments_count', $post->comments->count());
+        }
 
-          return response()->json($posts);
+        return response()->json($posts);
     }
 }

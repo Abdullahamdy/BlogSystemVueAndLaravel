@@ -5344,26 +5344,48 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Post",
   data: function data() {
     return {
-      posts: {}
+      posts: {},
+      singlepost: {},
+      searchPost: "",
+      issearching: false
     };
   },
   components: {
     Categories: _Categories_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  watch: {
+    searchPost: function searchPost(query) {
+      var _this = this;
+      if (query.length > 0) {
+        axios.get('/api/getpost/' + query).then(function (res) {
+          _this.issearching = false, _this.posts = res.data;
+          _this.issearching = false;
+        })["catch"](function (err) {});
+      } else {
+        var oldposts = JSON.parse(localStorage.getItem('posts'));
+        this.posts = oldposts;
+      }
+    }
   },
   mounted: function mounted() {
     this.getPosts();
   },
   methods: {
     getPosts: function getPosts() {
-      var _this = this;
+      var _this2 = this;
       axios.get("/api/posts").then(function (res) {
-        _this.posts = res.data;
+        _this2.posts = res.data;
+        localStorage.setItem('posts', JSON.stringify(_this2.posts));
       }).then(function (err) {
         return console.log(err);
       });
@@ -28265,78 +28287,132 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row" }, [
-    _c(
-      "div",
-      { staticClass: "col-md-8" },
-      _vm._l(_vm.posts, function (post) {
-        return _c("div", { key: post.id, staticClass: "media simple-post" }, [
-          _c("img", {
-            staticClass: "mr-3",
-            attrs: {
-              src: "/img/" + post.image,
-              alt: "Generic placeholder image",
-            },
-          }),
-          _vm._v(" "),
-          _c("div", { staticClass: "media-body" }, [
-            _c(
-              "h4",
-              { staticClass: "mt-0" },
+    _vm.issearching
+      ? _c("div", { staticClass: "col-md-8" }, [
+          _vm._v("\n       searching....\n  "),
+        ])
+      : _c(
+          "div",
+          { staticClass: "col-md-8" },
+          _vm._l(_vm.posts, function (post) {
+            return _c(
+              "div",
+              { key: post.id, staticClass: "media simple-post" },
               [
-                _c("router-link", { attrs: { to: "/post/" + post.slug } }, [
-                  _vm._v(
-                    "\n            " + _vm._s(post.title) + "\n          "
+                _c("img", {
+                  staticClass: "mr-3",
+                  attrs: {
+                    src: "/img/" + post.image,
+                    alt: "Generic placeholder image",
+                  },
+                }),
+                _vm._v(" "),
+                _c("div", { staticClass: "media-body" }, [
+                  _c(
+                    "h4",
+                    { staticClass: "mt-0" },
+                    [
+                      _c(
+                        "router-link",
+                        { attrs: { to: "/post/" + post.slug } },
+                        [
+                          _vm._v(
+                            "\n            " +
+                              _vm._s(post.title) +
+                              "\n          "
+                          ),
+                        ]
+                      ),
+                    ],
+                    1
                   ),
-                ]),
-              ],
-              1
-            ),
-            _vm._v(
-              "\n        " + _vm._s(post.body.substr(0, 150)) + "\n        "
-            ),
-            _c(
-              "ul",
-              { staticClass: "list-inline list-unstyled d-flex post-info" },
-              [
-                _c("li", [
-                  _c("span", [
-                    _c("i", { staticClass: "fa fa-user" }),
-                    _vm._v(" posted by :\n              "),
-                    _c("strong", { staticClass: "text-primary" }, [
-                      _vm._v(_vm._s(post.user.name)),
-                    ]),
-                  ]),
-                ]),
-                _vm._v(" "),
-                _c("li", [_vm._v("|")]),
-                _vm._v(" "),
-                _c("li", [
-                  _c("span", [
-                    _c("i", { staticClass: "fa fa-calendar" }),
-                    _vm._v(" " + _vm._s(post.created_at) + " "),
-                  ]),
-                ]),
-                _vm._v(" "),
-                _c("li", [_vm._v("|")]),
-                _vm._v(" "),
-                _c("span", [
-                  _c("i", { staticClass: "fa fa-comment" }),
                   _vm._v(
-                    "\n            " + _vm._s(post.comments_count) + " comments"
+                    "\n        " +
+                      _vm._s(post.body.substr(0, 150)) +
+                      "\n        "
+                  ),
+                  _c(
+                    "ul",
+                    {
+                      staticClass: "list-inline list-unstyled d-flex post-info",
+                    },
+                    [
+                      _c("li", [
+                        _c("span", [
+                          _c("i", { staticClass: "fa fa-user" }),
+                          _vm._v(" posted by :\n              "),
+                          _c("strong", { staticClass: "text-primary" }, [
+                            _vm._v(_vm._s(post.user.name)),
+                          ]),
+                        ]),
+                      ]),
+                      _vm._v(" "),
+                      _c("li", [_vm._v("|")]),
+                      _vm._v(" "),
+                      _c("li", [
+                        _c("span", [
+                          _c("i", { staticClass: "fa fa-calendar" }),
+                          _vm._v(" " + _vm._s(post.created_at) + " "),
+                        ]),
+                      ]),
+                      _vm._v(" "),
+                      _c("li", [_vm._v("|")]),
+                      _vm._v(" "),
+                      _c("span", [
+                        _c("i", { staticClass: "fa fa-comment" }),
+                        _vm._v(
+                          "\n            " +
+                            _vm._s(post.comments_count) +
+                            " comments"
+                        ),
+                      ]),
+                    ]
                   ),
                 ]),
               ]
-            ),
-          ]),
-        ])
-      }),
-      0
-    ),
+            )
+          }),
+          0
+        ),
     _vm._v(" "),
     _c(
       "div",
       { staticClass: "col-md-4" },
-      [_vm._m(0), _vm._v(" "), _c("Categories")],
+      [
+        _c("div", { staticClass: "card my-4" }, [
+          _c("h5", { staticClass: "card-header" }, [_vm._v("Search")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "input-group" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.searchPost,
+                    expression: "searchPost",
+                  },
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", placeholder: "Search for..." },
+                domProps: { value: _vm.searchPost },
+                on: {
+                  input: function ($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.searchPost = $event.target.value
+                  },
+                },
+              }),
+              _vm._v(" "),
+              _vm._m(0),
+            ]),
+          ]),
+        ]),
+        _vm._v(" "),
+        _c("Categories"),
+      ],
       1
     ),
   ])
@@ -28346,25 +28422,12 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card my-4" }, [
-      _c("h5", { staticClass: "card-header" }, [_vm._v("Search")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "card-body" }, [
-        _c("div", { staticClass: "input-group" }, [
-          _c("input", {
-            staticClass: "form-control",
-            attrs: { type: "text", placeholder: "Search for..." },
-          }),
-          _vm._v(" "),
-          _c("span", { staticClass: "input-group-btn" }, [
-            _c(
-              "button",
-              { staticClass: "btn btn-secondary", attrs: { type: "button" } },
-              [_vm._v("Go!")]
-            ),
-          ]),
-        ]),
-      ]),
+    return _c("span", { staticClass: "input-group-btn" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-secondary", attrs: { type: "button" } },
+        [_vm._v("Go!")]
+      ),
     ])
   },
 ]
