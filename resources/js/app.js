@@ -33,7 +33,16 @@ Vue.component('pagination',require('laravel-vue-pagination'));
  */
 
 import router from './routes/routes'
+import Vuex from 'vuex';
+Vue.use(Vuex)
+const store = new Vuex.Store({
+    state:{
+        userToken : 'abdullah'
+    }
+
+});
 const app = new Vue({
     el: '#app',
-    router
+    router,
+    store,
 });

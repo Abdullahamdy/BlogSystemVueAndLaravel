@@ -13,17 +13,17 @@
           <form action="/examples/actions/confirmation.php" method="post" nonvalidate>
               <h2 class="text-center">Create New Account</h2>
               <div class="form-group">
-                  <input type="text" class="form-control" placeholder="firstname" v-model="firstname">
-                  <div class="text-danger" v-show="firstnameError">
-                    the first name is to short
+                  <input type="text" class="form-control" placeholder="Name" v-model="name">
+                  <div class="text-danger" v-show="nameError">
+                    the Name is to short
                 </div>
               </div>
-              <div class="form-group">
+              <!-- <div class="form-group">
                   <input type="text" class="form-control" placeholder="lastname" v-model="lastname">
                   <div class="text-danger" v-show="lastnameError">
                     the last name is to short
                 </div>
-                </div>
+                </div> -->
               <div class="form-group">
                   <input type="email" class="form-control" placeholder="email" v-model="email">
                   <div class="text-danger" v-show="emailError">
@@ -59,19 +59,18 @@
 export default {
     data(){
         return {
-            firstname:'',
-            lastname:'',
+            name:'',
             password:'',
             email:'',
         }
     },
     computed:{
-        firstnameError(){
-            return this.firstname.length > 0 && this.firstname.length < 4;
+        nameError(){
+            return this.name.length > 0 && this.name.length < 4;
         },
-        lastnameError(){
-            return this.lastname.length > 0 && this.lastname.length < 4;
-        },
+        // lastnameError(){
+        //     return this.lastname.length > 0 && this.lastname.length < 4;
+        // },
         emailError(){
             return !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email)) && this.email.length > 0;
         },
@@ -79,8 +78,7 @@ export default {
             return this.password.length > 0 && this.password.length < 7;
         },
         isValidForm(){
-            return this.firstname.length > 4
-            && this.lastname.length > 4
+            return this.name.length > 4
             &&this.password.length > 7 && (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email))
 
         }
@@ -89,7 +87,7 @@ export default {
     },
     methods:{
         submitRegister(){
-            console.log('submition')
+            console.log(this.$store.state.userToken)
         }
     }
 }
