@@ -26,6 +26,7 @@ Vue.component('login', require('./components/Login.vue').default);
 
 //PAGINATION COMPONENET
 Vue.component('pagination',require('laravel-vue-pagination'));
+import axios from 'axios';
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -37,7 +38,48 @@ import Vuex from 'vuex';
 Vue.use(Vuex)
 const store = new Vuex.Store({
     state:{
-        userToken : 'abdullah'
+        userToken : null
+    },
+    getters:{
+        isLogged(state){
+            return !!state.userToken;
+        }
+    },
+    mutations:{
+        setUserToken(state,userToken){
+            state.userToken = userToken
+            localStorage.setItem('userToken',JSON.stringify(userToken));
+            axios.defaults.headers.common.Authorization = `bearer ${userToken}`
+        },
+        removeUserToken(state){
+            state.userToken = null;
+            localStorage.removeItem('userToken')
+
+        }
+    },
+    actions:{
+        RegisterUser({commit},payload){
+            axios.post('/api/register',payload)
+            .then(res=>{
+                commit('setUserToken',payload)
+
+            })
+            .catch(err=>{
+                console.log(err)
+            })
+
+        },
+        LoginUser({commit},payload){
+            axios.post('/api/login',payload)
+            .then(res=>{
+                commit('setUserToken',payload)
+
+            })
+            .catch(err=>{
+                console.log(err)
+            })
+
+        }
     }
 
 });

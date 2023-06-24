@@ -5747,7 +5747,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     submitRegister: function submitRegister() {
-      console.log(this.$store.state.userToken);
+      this.$store.commit('setUserToken', {
+        userToken: 'kdflajdfie'
+      });
+      console.log(this.$store.getters.isLogged);
     }
   }
 });
@@ -5762,8 +5765,10 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _routes_routes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./routes/routes */ "./resources/js/routes/routes.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _routes_routes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./routes/routes */ "./resources/js/routes/routes.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -5791,6 +5796,7 @@ Vue.component('login', (__webpack_require__(/*! ./components/Login.vue */ "./res
 
 //PAGINATION COMPONENET
 Vue.component('pagination', __webpack_require__(/*! laravel-vue-pagination */ "./node_modules/laravel-vue-pagination/dist/laravel-vue-pagination.common.js"));
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -5799,15 +5805,49 @@ Vue.component('pagination', __webpack_require__(/*! laravel-vue-pagination */ ".
 
 
 
-Vue.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
-var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
+Vue.use(vuex__WEBPACK_IMPORTED_MODULE_2__["default"]);
+var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
   state: {
-    userToken: 'abdullah'
+    userToken: null
+  },
+  getters: {
+    isLogged: function isLogged(state) {
+      return !!state.userToken;
+    }
+  },
+  mutations: {
+    setUserToken: function setUserToken(state, userToken) {
+      state.userToken = userToken;
+      localStorage.setItem('userToken', JSON.stringify(userToken));
+      (axios__WEBPACK_IMPORTED_MODULE_0___default().defaults).headers.common.Authorization = "bearer ".concat(userToken);
+    },
+    removeUserToken: function removeUserToken(state) {
+      state.userToken = null;
+      localStorage.removeItem('userToken');
+    }
+  },
+  actions: {
+    RegisterUser: function RegisterUser(_ref, payload) {
+      var commit = _ref.commit;
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post('/api/register', payload).then(function (res) {
+        commit('setUserToken', payload);
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    },
+    LoginUser: function LoginUser(_ref2, payload) {
+      var commit = _ref2.commit;
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post('/api/login', payload).then(function (res) {
+        commit('setUserToken', payload);
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    }
   }
 });
 var app = new Vue({
   el: '#app',
-  router: _routes_routes__WEBPACK_IMPORTED_MODULE_0__["default"],
+  router: _routes_routes__WEBPACK_IMPORTED_MODULE_1__["default"],
   store: store
 });
 
@@ -46634,6 +46674,18 @@ module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"P
 /******/ 				}
 /******/ 			}
 /******/ 			return result;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
 /******/ 		};
 /******/ 	})();
 /******/ 	

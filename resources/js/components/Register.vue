@@ -87,7 +87,10 @@ export default {
     },
     methods:{
         submitRegister(){
-            console.log(this.$store.state.userToken)
+            this.$store.commit('setUserToken',{
+                userToken:'kdflajdfie'
+            })
+            console.log(this.$store.getters.isLogged)
         }
     }
 }
