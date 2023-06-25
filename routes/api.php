@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,5 +28,6 @@ Route::get('category/{slug}/posts',[PostController::class,'categoryPost']);
 Route::get('getpost/{query}',[PostController::class,'getPost']);
 Route::middleware('auth:api')->group(function () {
     Route::get('user', [UserController::class,'details']);
+    Route::post('comment/create', [CommentController::class,'store']);
 
 });

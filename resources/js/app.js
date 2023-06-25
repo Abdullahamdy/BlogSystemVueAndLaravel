@@ -49,7 +49,7 @@ const store = new Vuex.Store({
         setUserToken(state,userToken){
             state.userToken = userToken
             localStorage.setItem('userToken',JSON.stringify(userToken));
-            axios.defaults.headers.common.Authorization = `bearer ${userToken}`
+            axios.defaults.headers.common.Authorization = `Bearer ${userToken}`
         },
         removeUserToken(state){
             state.userToken = null;

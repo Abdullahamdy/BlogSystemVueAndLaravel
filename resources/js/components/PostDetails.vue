@@ -52,9 +52,10 @@
           <div class="card-body">
             <form>
               <div class="form-group">
-                <textarea class="form-control" rows="3"></textarea>
+                <input type="hidden" v-model="post_id">
+                <textarea class="form-control" rows="3" v-model="body"></textarea>
               </div>
-              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="submit" class="btn btn-primary" @click.prevent="addcomment">Submit</button>
             </form>
           </div>
         </div>
@@ -143,6 +144,8 @@ export default {
   data() {
     return {
       PostDetails: {},
+      body:'',
+      post_id:'',
     };
   },
   created() {
@@ -153,10 +156,24 @@ export default {
       axios
         .get("/api/posts/" + this.$route.params.slug)
         .then((res) => {
-          this.PostDetails = res.data;
+            this.PostDetails = res.data;
+            this.post_id = this.PostDetails.id
         });
     },
+    addcomment(){
+        let {body,post_id} = this;
+        axios.post('/api/comment/create',{body,post_id})
+        .then(res=>{
+            console.log(res.data)
+        })
+    }
   },
+  computed:{
+    isLogged(){
+        return this.$store.getters.isLogged;
+    }
+  }
+
 };
 </script>
 <style scoped>
