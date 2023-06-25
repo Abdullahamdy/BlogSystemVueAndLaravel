@@ -24,7 +24,7 @@
           }}</strong>
           <span class="float-right"
             ><strong class="badge badge-info p-1">{{
-              PostDetails.comments_count
+              comments.length
             }}</strong>
             comments</span
           >
@@ -146,10 +146,12 @@ export default {
       PostDetails: {},
       body:'',
       post_id:'',
+      comments:[],
     };
   },
   created() {
     this.getpost();
+    this.updateToken()
   },
   methods: {
     getpost() {
@@ -157,15 +159,22 @@ export default {
         .get("/api/posts/" + this.$route.params.slug)
         .then((res) => {
             this.PostDetails = res.data;
-            this.post_id = this.PostDetails.id
+            this.post_id = this.PostDetails.id;
+            this.comments = this.PostDetails.comments;
         });
     },
     addcomment(){
         let {body,post_id} = this;
         axios.post('/api/comment/create',{body,post_id})
         .then(res=>{
+            this.comments.unshift(res.data)
+            this.body = '',
             console.log(res.data)
         })
+    },
+    updateToken(){
+        let token = JSON.parse(localStorage.getItem('userToken'));
+        this.$store.commit('setUserToken',token)
     }
   },
   computed:{

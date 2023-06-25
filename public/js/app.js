@@ -5641,11 +5641,13 @@ __webpack_require__.r(__webpack_exports__);
     return {
       PostDetails: {},
       body: '',
-      post_id: ''
+      post_id: '',
+      comments: []
     };
   },
   created: function created() {
     this.getpost();
+    this.updateToken();
   },
   methods: {
     getpost: function getpost() {
@@ -5653,17 +5655,24 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/api/posts/" + this.$route.params.slug).then(function (res) {
         _this.PostDetails = res.data;
         _this.post_id = _this.PostDetails.id;
+        _this.comments = _this.PostDetails.comments;
       });
     },
     addcomment: function addcomment() {
+      var _this2 = this;
       var body = this.body,
         post_id = this.post_id;
       axios.post('/api/comment/create', {
         body: body,
         post_id: post_id
       }).then(function (res) {
-        console.log(res.data);
+        _this2.comments.unshift(res.data);
+        _this2.body = '', console.log(res.data);
       });
+    },
+    updateToken: function updateToken() {
+      var token = JSON.parse(localStorage.getItem('userToken'));
+      this.$store.commit('setUserToken', token);
     }
   },
   computed: {
@@ -29725,7 +29734,7 @@ var render = function () {
             _vm._v(" "),
             _c("span", { staticClass: "float-right" }, [
               _c("strong", { staticClass: "badge badge-info p-1" }, [
-                _vm._v(_vm._s(_vm.PostDetails.comments_count)),
+                _vm._v(_vm._s(_vm.comments.length)),
               ]),
               _vm._v("\n          comments"),
             ]),
