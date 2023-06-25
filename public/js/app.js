@@ -5344,7 +5344,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     loginForm: function loginForm() {
-      console.log('login');
+      var email = this.email,
+        password = this.password;
+      this.$store.dispatch('LoginUser', {
+        email: email,
+        password: password
+      });
     }
   }
 });
@@ -5747,10 +5752,14 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     submitRegister: function submitRegister() {
-      this.$store.commit('setUserToken', {
-        userToken: 'kdflajdfie'
+      var name = this.name,
+        email = this.email,
+        password = this.password;
+      this.$store.dispatch('RegisterUser', {
+        name: name,
+        email: email,
+        password: password
       });
-      console.log(this.$store.getters.isLogged);
     }
   }
 });
@@ -5830,7 +5839,9 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
     RegisterUser: function RegisterUser(_ref, payload) {
       var commit = _ref.commit;
       axios__WEBPACK_IMPORTED_MODULE_0___default().post('/api/register', payload).then(function (res) {
-        commit('setUserToken', payload);
+        console.log(res);
+        commit('setUserToken', res.data.token);
+        console.log(res.data.token);
       })["catch"](function (err) {
         console.log(err);
       });
@@ -5838,7 +5849,8 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
     LoginUser: function LoginUser(_ref2, payload) {
       var commit = _ref2.commit;
       axios__WEBPACK_IMPORTED_MODULE_0___default().post('/api/login', payload).then(function (res) {
-        commit('setUserToken', payload);
+        console.log(res.data.token);
+        commit('setUserToken', res.data.token);
       })["catch"](function (err) {
         console.log(err);
       });

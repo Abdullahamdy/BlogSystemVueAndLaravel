@@ -63,7 +63,8 @@
     },
     methods:{
         loginForm(){
-            console.log('login')
+            let {email,password} = this;
+            this.$store.dispatch('LoginUser',{email,password})
         }
     }
 }
