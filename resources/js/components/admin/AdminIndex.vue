@@ -10,9 +10,9 @@
                       <div class="col-sm-6">
                           <a href="#addPostModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Post</span></a>
 
-                          <a href="#deletePostModal"  v-if="selectedPosts.length"
+                          <a href="#deletePostModal"
                           class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
-                          <a href="#deletePostModalnopost"  v-if="!selectedPosts.length"
+                          <a href="#deletePostModalnopost"
                           class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
                       </div>
                   </div>
@@ -36,23 +36,23 @@
                       </tr>
                   </thead>
                   <tbody v-if="posts.data">
-                      <tr v-for="(post,index) in posts.data" :key="index">
+                    <tr v-for="(post,index) in posts.data" :key="index">
                           <td>
                               <span class="custom-checkbox">
-                                  <input type="checkbox" :id="'checkbox1'+index" @click.stop="selectPost(post,$event)"
+                                  <input type="checkbox"
                                   name="options[]" value="1">
-                                  <label :for="'checkbox1'+index"></label>
+                                  <label ></label>
                               </span>
                           </td>
-                          <td>title</td>
-                          <td>ttt</td>
+                          <td>{{ post.title }}</td>
+                          <td>{{ post.body.substr(0,150) }}</td>
                           <td>
-                              <span class="badge badge-info p-1 mb-1"></span>
+                              <span class="badge badge-info p-1 mb-1">{{ post.category.name }}</span>
                           </td>
                           <td>
                               <img src="" style="width:100px;height:60px;border:1px solid #e7e7e7" alt="">
                           </td>
-                          <td></td>
+                          <td>{{ post.user.name }}</td>
                           <td>
                               <a href="#editPostModal" class="edit"
                                data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
@@ -66,7 +66,7 @@
               </table>
               <div class="clearfix">
                   <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                  <!-- <pagination :data="posts" @pagination-change-page="getPosts"></pagination> -->
+                  <pagination :data="posts" @pagination-change-page="getposts"></pagination>
               </div>
           </div>
       </div>
@@ -82,19 +82,19 @@
                       <div class="modal-body">
                           <div class="form-group">
                               <label>title</label>
-                              <input type="text" class="form-control" required v-model="title">
+                              <input type="text" class="form-control">
                           </div>
                           <div class="form-group">
                               <label>body</label>
-                              <textarea name=""  cols="30" class="form-control" v-model="body"
+                              <textarea name=""  cols="30" class="form-control"
                               rows="10"></textarea>
                           </div>
                           <div class="form-group">
                               <label>category</label>
-                              <select name="" class="form-control" v-model="category">
+                              <select name="" class="form-control" >
                                   <option value="0" disabled selected>choose category</option>
 
-                                  <option :value="category.id" v-for="category in categories" :key="category.id">
+                                  <option>
                                    Category Name
                                   </option>
                               </select>
@@ -106,7 +106,7 @@
                       </div>
                       <div class="modal-footer">
                           <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                          <input type="submit" class="btn btn-success" value="Add" @click.prevent="addPost">
+                          <input type="submit" class="btn btn-success" value="Add" >
                       </div>
                   </form>
               </div>
@@ -157,23 +157,27 @@
   </template>
 
   <script>
+export default {
+    created(){
+        this.getposts();
+    },
+    data(){
+        return {
+            posts:{},
+        }
+    },
+    methods:{
+        getposts(page){
+                axios.get('/api/admin/posts?page=' + page)
+                .then(res => {
+                    this.posts = res.data;
+                    localStorage.setItem('posts',JSON.stringify(this.posts));
+                })
+                .then(err => console.log(err))
+			},
+    }
+}
 
-  export default {
-      data(){
-          return {
-              posts :{},
-              title :'',
-              body  :'',
-              image : '',
-              category : '',
-              categories : [],
-              selectedPosts : []
-          }
-      },
-
-
-
-  }
   $(document).ready(function(){
       // Activate tooltip
       $('[data-toggle="tooltip"]').tooltip();

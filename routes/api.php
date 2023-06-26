@@ -1,11 +1,13 @@
 <?php
 
+use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Api\PostController;
-use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,4 +32,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('user', [UserController::class,'details']);
     Route::post('comment/create', [CommentController::class,'store']);
 
+});
+Route::group(['prefix'=>'/admin','middleware'=>'auth:api' ],function(){
+    Route::get('/posts',[AdminController::class,'getPosts']);
 });
