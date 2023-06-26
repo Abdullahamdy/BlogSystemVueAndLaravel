@@ -15,7 +15,7 @@
 
           </li>
           <li>
-            <router-link class="nav-link" to="/admin">Admin
+            <router-link v-if="isAdmin" class="nav-link" to="/admin">Admin
               <span class="sr-only">(current)</span>
             </router-link>
           </li>
@@ -27,10 +27,13 @@
           </li>
 
           <li class="nav-item register-btn reg-login-btn" data-toggle="modal" data-target="#register-modal">
-            <a class="btn btn-info nav-link" href="" data-toggle="modal" data-target="#register-modal">Register</a>
+            <a v-if="!isLogged" class="btn btn-info nav-link" href="" data-toggle="modal" data-target="#register-modal">Register</a>
           </li>
           <li class="nav-item reg-login-btn" data-toggle="modal" data-target="#login-modal">
-            <a class="btn btn-primary text-weight nav-link" href="#">login</a>
+            <a v-if="!isLogged"  class="btn btn-primary text-weight nav-link" href="#">login</a>
+          </li>
+          <li  class="nav-item"  v-if="isLogged"  @click.stop="logOut">
+            <a  class="nav-link" href="">LogOut</a>
           </li>
         </ul>
       </div>
@@ -43,6 +46,32 @@
 
 <script>
 export default {
-
+    created() {
+    this.updateToken()
+    this.setUser()
+  },
+   computed:{
+    isLogged(){
+        return this.$store.getters.isLogged;
+    },
+    isAdmin(){
+        return this.$store.getters.isAdmin;
+    }
+   },
+   methods:{
+    updateToken(){
+        let token = JSON.parse(localStorage.getItem('userToken'));
+        this.$store.commit('setUserToken',token)
+    },
+    setUser(){
+        if(this.isLogged)
+        axios.get('/api/user').then(res=>{
+            this.$store.commit( 'setUser',res.data.user)
+        })
+    },
+    logOut(){
+        return this.$store.commit('logOut')
+    }
+   }
 }
 </script>

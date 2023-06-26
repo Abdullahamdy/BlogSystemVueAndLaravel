@@ -5302,8 +5302,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  created: function created() {
+    this.updateToken();
+    this.setUser();
+  },
+  computed: {
+    isLogged: function isLogged() {
+      return this.$store.getters.isLogged;
+    },
+    isAdmin: function isAdmin() {
+      return this.$store.getters.isAdmin;
+    }
+  },
+  methods: {
+    updateToken: function updateToken() {
+      var token = JSON.parse(localStorage.getItem('userToken'));
+      this.$store.commit('setUserToken', token);
+    },
+    setUser: function setUser() {
+      var _this = this;
+      if (this.isLogged) axios.get('/api/user').then(function (res) {
+        _this.$store.commit('setUser', res.data.user);
+      });
+    },
+    logOut: function logOut() {
+      return this.$store.commit('logOut');
+    }
+  }
+});
 
 /***/ }),
 
@@ -6088,11 +6119,18 @@ Vue.component('pagination', __webpack_require__(/*! laravel-vue-pagination */ ".
 Vue.use(vuex__WEBPACK_IMPORTED_MODULE_2__["default"]);
 var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
   state: {
-    userToken: null
+    userToken: null,
+    user: null
   },
   getters: {
     isLogged: function isLogged(state) {
       return !!state.userToken;
+    },
+    isAdmin: function isAdmin(state) {
+      if (state.user) {
+        return state.user.is_admin;
+      }
+      return null;
     }
   },
   mutations: {
@@ -6104,6 +6142,14 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
     removeUserToken: function removeUserToken(state) {
       state.userToken = null;
       localStorage.removeItem('userToken');
+    },
+    setUser: function setUser(state, user) {
+      state.user = user;
+    },
+    logOut: function logOut(state) {
+      state.userToken;
+      localStorage.removeItem('userToken');
+      window.location.pathname = "/";
     }
   },
   actions: {
@@ -6122,6 +6168,9 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
       axios__WEBPACK_IMPORTED_MODULE_0___default().post('/api/login', payload).then(function (res) {
         console.log(res.data.token);
         commit('setUserToken', res.data.token);
+        axios__WEBPACK_IMPORTED_MODULE_0___default().get('/api/user').then(function (res) {
+          commit('setUser', res.data.user);
+        });
       })["catch"](function (err) {
         console.log(err);
       });
@@ -30066,16 +30115,21 @@ var render = function () {
                   _c(
                     "li",
                     [
-                      _c(
-                        "router-link",
-                        { staticClass: "nav-link", attrs: { to: "/admin" } },
-                        [
-                          _vm._v("Admin\n              "),
-                          _c("span", { staticClass: "sr-only" }, [
-                            _vm._v("(current)"),
-                          ]),
-                        ]
-                      ),
+                      _vm.isAdmin
+                        ? _c(
+                            "router-link",
+                            {
+                              staticClass: "nav-link",
+                              attrs: { to: "/admin" },
+                            },
+                            [
+                              _vm._v("Admin\n              "),
+                              _c("span", { staticClass: "sr-only" }, [
+                                _vm._v("(current)"),
+                              ]),
+                            ]
+                          )
+                        : _vm._e(),
                     ],
                     1
                   ),
@@ -30084,9 +30138,78 @@ var render = function () {
                   _vm._v(" "),
                   _vm._m(2),
                   _vm._v(" "),
-                  _vm._m(3),
+                  _c(
+                    "li",
+                    {
+                      staticClass: "nav-item register-btn reg-login-btn",
+                      attrs: {
+                        "data-toggle": "modal",
+                        "data-target": "#register-modal",
+                      },
+                    },
+                    [
+                      !_vm.isLogged
+                        ? _c(
+                            "a",
+                            {
+                              staticClass: "btn btn-info nav-link",
+                              attrs: {
+                                href: "",
+                                "data-toggle": "modal",
+                                "data-target": "#register-modal",
+                              },
+                            },
+                            [_vm._v("Register")]
+                          )
+                        : _vm._e(),
+                    ]
+                  ),
                   _vm._v(" "),
-                  _vm._m(4),
+                  _c(
+                    "li",
+                    {
+                      staticClass: "nav-item reg-login-btn",
+                      attrs: {
+                        "data-toggle": "modal",
+                        "data-target": "#login-modal",
+                      },
+                    },
+                    [
+                      !_vm.isLogged
+                        ? _c(
+                            "a",
+                            {
+                              staticClass:
+                                "btn btn-primary text-weight nav-link",
+                              attrs: { href: "#" },
+                            },
+                            [_vm._v("login")]
+                          )
+                        : _vm._e(),
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _vm.isLogged
+                    ? _c(
+                        "li",
+                        {
+                          staticClass: "nav-item",
+                          on: {
+                            click: function ($event) {
+                              $event.stopPropagation()
+                              return _vm.logOut.apply(null, arguments)
+                            },
+                          },
+                        },
+                        [
+                          _c(
+                            "a",
+                            { staticClass: "nav-link", attrs: { href: "" } },
+                            [_vm._v("LogOut")]
+                          ),
+                        ]
+                      )
+                    : _vm._e(),
                 ]),
               ]
             ),
@@ -30139,54 +30262,6 @@ var staticRenderFns = [
         _vm._v("Contact"),
       ]),
     ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "li",
-      {
-        staticClass: "nav-item register-btn reg-login-btn",
-        attrs: { "data-toggle": "modal", "data-target": "#register-modal" },
-      },
-      [
-        _c(
-          "a",
-          {
-            staticClass: "btn btn-info nav-link",
-            attrs: {
-              href: "",
-              "data-toggle": "modal",
-              "data-target": "#register-modal",
-            },
-          },
-          [_vm._v("Register")]
-        ),
-      ]
-    )
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "li",
-      {
-        staticClass: "nav-item reg-login-btn",
-        attrs: { "data-toggle": "modal", "data-target": "#login-modal" },
-      },
-      [
-        _c(
-          "a",
-          {
-            staticClass: "btn btn-primary text-weight nav-link",
-            attrs: { href: "#" },
-          },
-          [_vm._v("login")]
-        ),
-      ]
-    )
   },
 ]
 render._withStripped = true

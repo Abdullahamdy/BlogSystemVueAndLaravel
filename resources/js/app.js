@@ -25,7 +25,7 @@ Vue.component('register', require('./components/Register.vue').default);
 Vue.component('login', require('./components/Login.vue').default);
 
 //PAGINATION COMPONENET
-Vue.component('pagination',require('laravel-vue-pagination'));
+Vue.component('pagination', require('laravel-vue-pagination'));
 import axios from 'axios';
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -37,51 +37,73 @@ import router from './routes/routes'
 import Vuex from 'vuex';
 Vue.use(Vuex)
 const store = new Vuex.Store({
-    state:{
-        userToken : null
+    state: {
+        userToken: null,
+        user: null,
     },
-    getters:{
-        isLogged(state){
+    getters: {
+        isLogged(state) {
             return !!state.userToken;
-        }
+        },
+        isAdmin(state) {
+            if (state.user) {
+                return state.user.is_admin
+            }
+            return null
+
+        },
     },
-    mutations:{
-        setUserToken(state,userToken){
+    mutations: {
+        setUserToken(state, userToken) {
             state.userToken = userToken
-            localStorage.setItem('userToken',JSON.stringify(userToken));
+            localStorage.setItem('userToken', JSON.stringify(userToken));
             axios.defaults.headers.common.Authorization = `Bearer ${userToken}`
         },
-        removeUserToken(state){
+        removeUserToken(state) {
             state.userToken = null;
             localStorage.removeItem('userToken')
 
-        }
-    },
-    actions:{
-        RegisterUser({commit},payload){
-            axios.post('/api/register',payload)
-            .then(res=>{
-                console.log(res)
-                commit('setUserToken',res.data.token)
-                console.log(res.data.token)
+        },
+        setUser(state, user) {
+            state.user = user
+        },
+        logOut(state){
+            state.userToken ;
+            localStorage.removeItem('userToken')
+            window.location.pathname = "/"
 
-            })
-            .catch(err=>{
-                console.log(err)
-            })
+        }
+
+    },
+    actions: {
+        RegisterUser({ commit }, payload) {
+            axios.post('/api/register', payload)
+                .then(res => {
+                    console.log(res)
+                    commit('setUserToken', res.data.token)
+                    console.log(res.data.token)
+
+                })
+                .catch(err => {
+                    console.log(err)
+                })
 
         },
-        LoginUser({commit},payload){
-            axios.post('/api/login',payload)
+        LoginUser({ commit }, payload) {
+            axios.post('/api/login', payload)
 
-            .then(res=>{
-                console.log(res.data.token)
-                commit('setUserToken',res.data.token)
+                .then(res => {
+                    console.log(res.data.token)
+                    commit('setUserToken', res.data.token)
+                    axios.get('/api/user')
+                        .then(res => {
+                            commit('setUser', res.data.user)
+                        })
 
-            })
-            .catch(err=>{
-                console.log(err)
-            })
+                })
+                .catch(err => {
+                    console.log(err)
+                })
 
         }
     }
