@@ -50,7 +50,7 @@
                               <span class="badge badge-info p-1 mb-1">{{ post.category.name }}</span>
                           </td>
                           <td>
-                              <img src="" style="width:100px;height:60px;border:1px solid #e7e7e7" alt="">
+                              <img :src="'img/'+post.image" style="width:100px;height:60px;border:1px solid #e7e7e7" alt="">
                           </td>
                           <td>{{ post.user.name }}</td>
                           <td>
@@ -82,31 +82,31 @@
                       <div class="modal-body">
                           <div class="form-group">
                               <label>title</label>
-                              <input type="text" class="form-control">
+                              <input v-model="title" type="text" class="form-control" >
                           </div>
                           <div class="form-group">
                               <label>body</label>
-                              <textarea name=""  cols="30" class="form-control"
+                              <textarea name=""  v-model="body" cols="30" class="form-control"
                               rows="10"></textarea>
                           </div>
                           <div class="form-group">
                               <label>category</label>
-                              <select name="" class="form-control" >
-                                  <option value="0" disabled selected>choose category</option>
+                              <select name="" class="form-control" v-model="category">
+                                  <option value="0" disabled selected >choose category</option>
 
-                                  <option>
-                                   Category Name
+                                  <option :value="category.id" v-for="(category ,index) in categories" :key="index">
+                                   {{ category.name }}
                                   </option>
                               </select>
                           </div>
                           <div class="form-group">
                               <label>image</label>
-                              <input type="file" class="form-control" required  >
+                              <input type="file" class="form-control" required  @change="onImageChange">
                           </div>
                       </div>
                       <div class="modal-footer">
                           <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                          <input type="submit" class="btn btn-success" value="Add" >
+                          <input type="submit" class="btn btn-success" value="Add" @click.prevent="addPost">
                       </div>
                   </form>
               </div>
@@ -143,7 +143,7 @@
                   <form>
                       <div class="modal-header">
                           <h4 class="modal-title">Delete Post</h4>
-                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                          <button type="button"  class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
                       <div class="modal-body">
                           <p>No post selected !</p>
@@ -158,13 +158,20 @@
 
   <script>
 export default {
-    created(){
-        this.getposts();
-    },
+
     data(){
         return {
             posts:{},
+            categories:[],
+            title:'',
+            body:'',
+            image:'',
+            category:'',
         }
+    },
+    created(){
+        this.getposts();
+        this.getCategory();
     },
     methods:{
         getposts(page){
@@ -173,8 +180,38 @@ export default {
                     this.posts = res.data;
                     localStorage.setItem('posts',JSON.stringify(this.posts));
                 })
-                .then(err => console.log(err))
-			},
+                .then(err =>
+                console.log(err)
+                )},
+            getCategory(){
+                axios.get('/api/admin/categories')
+                .then(res=>{
+                      this.categories = res.data;
+
+                }).then(err=>{
+
+                })
+            },
+            onImageChange(event){
+               this.image = event.target.files[0];
+            },
+            addPost(){
+                let config = {
+                    headers:{'content-type':'multipart/form-data'}
+                }
+                let formdata = new FormData();
+                formdata.append('title',this.title)
+                formdata.append('body',this.body)
+                formdata.append('image',this.image)
+                formdata.append('category',this.category)
+                axios.post('/api/admin/addpost',formdata,config).then(res=>{
+                   this.title = '';
+                   this.category = '';
+                   this.body = '';
+                   this.image = '';
+                   $('#addPostModal').hide();
+                })
+            }
     }
 }
 

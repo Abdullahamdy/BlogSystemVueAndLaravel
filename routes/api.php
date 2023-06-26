@@ -35,4 +35,6 @@ Route::middleware('auth:api')->group(function () {
 });
 Route::group(['prefix'=>'/admin','middleware'=>'auth:api' ],function(){
     Route::get('/posts',[AdminController::class,'getPosts']);
+    Route::get('/categories',[AdminController::class,'getCategories']);
+    Route::post('/addpost',[AdminController::class,'addPost']);
 });
