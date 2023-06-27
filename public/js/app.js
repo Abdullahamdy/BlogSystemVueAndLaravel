@@ -6274,6 +6274,49 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -6287,12 +6330,31 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     getCategory: function getCategory() {
       var _this = this;
-      axios.get('/api/admin/categories').then(function (res) {
+      axios.get("/api/admin/categories").then(function (res) {
         _this.categories = res.data;
       }).then(function (err) {});
     },
     onImageChanged: function onImageChanged(event) {
-      this.image = event.target.files[0];
+      this.PostToEdit.image = event.target.files[0];
+    },
+    updatePost: function updatePost() {
+      var _this2 = this;
+      var config = {
+        headers: {
+          "content-type": "multipart/form-data"
+        }
+      };
+      var formdata = new FormData();
+      formdata.append("id", this.PostToEdit.id);
+      formdata.append("title", this.PostToEdit.title);
+      formdata.append("body", this.PostToEdit.body);
+      formdata.append("image", this.PostToEdit.image);
+      formdata.append("category", this.PostToEdit.category.id);
+      axios.post("/api/admin/updatepost", formdata, config).then(function (res) {
+        _this2.PostToEdit.image = res.data.image;
+        $("#editPostModal").modal("hide");
+        $(".modal-backdrop").css("display", "none");
+      });
     }
   },
   computed: {
@@ -32189,9 +32251,9 @@ var render = function () {
                               },
                               [
                                 _vm._v(
-                                  "\n\t\t\t\t\t\t\t\t " +
+                                  "\n                " +
                                     _vm._s(category.name) +
-                                    "\n\t\t\t\t\t\t\t\t"
+                                    "\n              "
                                 ),
                               ]
                             )
@@ -32238,7 +32300,7 @@ var render = function () {
                   on: {
                     click: function ($event) {
                       $event.preventDefault()
-                      return _vm.editPost.apply(null, arguments)
+                      return _vm.updatePost.apply(null, arguments)
                     },
                   },
                 }),
@@ -32268,7 +32330,7 @@ var staticRenderFns = [
             "aria-hidden": "true",
           },
         },
-        [_vm._v("×")]
+        [_vm._v("\n            ×\n          ")]
       ),
     ])
   },
