@@ -38,4 +38,5 @@ Route::group(['prefix'=>'/admin','middleware'=>'auth:api' ],function(){
     Route::get('/categories',[AdminController::class,'getCategories']);
     Route::post('/addpost',[AdminController::class,'addPost']);
     Route::post('/updatepost',[AdminController::class,'updatePost']);
+    Route::post('/deletepost',[AdminController::class,'deletepost']);
 });

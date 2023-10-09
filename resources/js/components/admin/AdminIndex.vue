@@ -12,10 +12,10 @@
                                     class="material-icons">&#xE147;</i>
                                 <span>Add New Post</span></a>
 
-                            <a href="#deletePostModal" v-if="postSelected.length" class="btn btn-danger" data-toggle="modal"><i
-                                    class="material-icons">&#xE15C;</i> <span>Delete</span></a>
-                            <a href="#deletePostModalnopost" v-if="!postSelected.length" class="btn btn-danger" data-toggle="modal"><i
-                                    class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+                            <a href="#deletePostModal" v-if="postSelected.length" class="btn btn-danger"
+                                data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+                            <a href="#deletePostModalnopost" v-if="!postSelected.length" class="btn btn-danger"
+                                data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
                         </div>
                     </div>
                 </div>
@@ -215,8 +215,15 @@ export default {
             }
 
         },
-        deletepost(){
-            console.log(this.postSelected)
+        deletepost() {
+            let postids = [];
+            axios.post("/api/admin/deletepost", { 'post_ids': this.postSelected }).then((res) => {
+                $('input[type="checkbox"]').prop('checked', false);
+                this.getposts();
+
+            }).catch(err => {
+                console.log(err)
+            });
         },
 
 

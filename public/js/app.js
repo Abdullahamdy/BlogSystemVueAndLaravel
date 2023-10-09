@@ -6089,28 +6089,37 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     deletepost: function deletepost() {
-      console.log(this.postSelected);
+      var _this2 = this;
+      var postids = [];
+      axios.post("/api/admin/deletepost", {
+        'post_ids': this.postSelected
+      }).then(function (res) {
+        $('input[type="checkbox"]').prop('checked', false);
+        _this2.getposts();
+      })["catch"](function (err) {
+        console.log(err);
+      });
     },
     getposts: function getposts(page) {
-      var _this2 = this;
+      var _this3 = this;
       axios.get("/api/admin/posts?page=" + page).then(function (res) {
-        _this2.posts = res.data;
-        localStorage.setItem("posts", JSON.stringify(_this2.posts));
+        _this3.posts = res.data;
+        localStorage.setItem("posts", JSON.stringify(_this3.posts));
       }).then(function (err) {
         return console.log(err);
       });
     },
     getCategory: function getCategory() {
-      var _this3 = this;
+      var _this4 = this;
       axios.get("/api/admin/categories").then(function (res) {
-        _this3.categories = res.data;
+        _this4.categories = res.data;
       }).then(function (err) {});
     },
     onImageChange: function onImageChange(event) {
       this.image = event.target.files[0];
     },
     addPost: function addPost() {
-      var _this4 = this;
+      var _this5 = this;
       var config = {
         headers: {
           "content-type": "multipart/form-data"
@@ -6122,10 +6131,10 @@ __webpack_require__.r(__webpack_exports__);
       formdata.append("image", this.image);
       formdata.append("category", this.category);
       axios.post("/api/admin/addpost", formdata, config).then(function (res) {
-        _this4.title = "";
-        _this4.category = "";
-        _this4.body = "";
-        _this4.image = "";
+        _this5.title = "";
+        _this5.category = "";
+        _this5.body = "";
+        _this5.image = "";
         $("#addPostModal").modal("hide");
         $(".modal-backdrop").css("display", "none");
       });
