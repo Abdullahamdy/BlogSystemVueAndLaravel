@@ -5,11 +5,13 @@ namespace App\Notifications;
 use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NotifyOwner extends Notification
+class NotifyOwner extends Notification implements ShouldBroadcast
 {
     use Queueable;
     public $comment_owner;
@@ -65,5 +67,14 @@ class NotifyOwner extends Notification
             'commented_at'=>$this->commented_at,
             'post'=>$this->post,
         ];
+    }
+
+
+    public function toBroadcast($notifiable)
+    {
+        return new BroadcastMessage([
+            
+
+        ]);
     }
 }
