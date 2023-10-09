@@ -21,7 +21,7 @@ use App\Http\Controllers\Api\CategoryController;
 */
 Route::post('login', [UserController::class,'login']);
 Route::post('register', [UserController::class,'register']);
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::apiResource('posts',PostController::class);
@@ -40,3 +40,4 @@ Route::group(['prefix'=>'/admin','middleware'=>'auth:api' ],function(){
     Route::post('/updatepost',[AdminController::class,'updatePost']);
     Route::post('/deletepost',[AdminController::class,'deletepost']);
 });
+

@@ -34,10 +34,10 @@ window.Echo = new Echo({
     broadcaster: 'pusher',
     key: process.env.MIX_PUSHER_APP_KEY,
     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-    forceTLS: true,
+    encrypted:true,
     host: window.location.hostname + ':8000',
     authEndPoint: "/api/broadcasting/auth",
-    csrfToken: token,
+    csrfToken: token.content,
     auth: {
         headers: {
             Authorization: JSON.parse(localStorage.getItem('userToken'))

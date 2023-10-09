@@ -70,8 +70,13 @@ const store = new Vuex.Store({
 
         },
         setUser(state, user) {
-            state.user = user
-        },
+            state.user = user;
+            const pusher = Echo.connector.pusher; // Get the Pusher instance
+
+            if (pusher && pusher.config && pusher.config.auth && pusher.config.auth.headers) {
+              pusher.config.auth.headers.Authorization = `Bearer ${state.userToken}`;
+            }
+          },
         logOut(state){
             state.userToken ;
             localStorage.removeItem('userToken')

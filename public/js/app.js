@@ -5679,27 +5679,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "PostDetails",
@@ -5722,18 +5701,26 @@ __webpack_require__.r(__webpack_exports__);
         _this.PostDetails = res.data;
         _this.post_id = _this.PostDetails.id;
         _this.comments = _this.PostDetails.comments;
+        _this.initializelistener();
+      });
+    },
+    initializelistener: function initializelistener() {
+      var _this2 = this;
+      Echo["private"]("newComment.".concat(this.post_id)).listen('NewComment', function (e) {
+        _this2.comments.unshift(e.comment);
+        console.log(e);
       });
     },
     addcomment: function addcomment() {
-      var _this2 = this;
+      var _this3 = this;
       var body = this.body,
         post_id = this.post_id;
       axios.post('/api/comment/create', {
         body: body,
         post_id: post_id
       }).then(function (res) {
-        _this2.comments.unshift(res.data);
-        _this2.body = '', console.log(res.data);
+        _this3.comments.unshift(res.data);
+        _this3.body = '', console.log(res.data);
       });
     },
     updateToken: function updateToken() {
@@ -6401,6 +6388,11 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
     },
     setUser: function setUser(state, user) {
       state.user = user;
+      var pusher = Echo.connector.pusher; // Get the Pusher instance
+
+      if (pusher && pusher.config && pusher.config.auth && pusher.config.auth.headers) {
+        pusher.config.auth.headers.Authorization = "Bearer ".concat(state.userToken);
+      }
     },
     logOut: function logOut(state) {
       state.userToken;
@@ -6482,12 +6474,12 @@ if (token) {
 window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   broadcaster: 'pusher',
-  key: "",
-  cluster: "mt1",
-  forceTLS: true,
+  key: "fc6a70404d9609227714",
+  cluster: "ap2",
+  encrypted: true,
   host: window.location.hostname + ':8000',
   authEndPoint: "/api/broadcasting/auth",
-  csrfToken: token,
+  csrfToken: token.content,
   auth: {
     headers: {
       Authorization: JSON.parse(localStorage.getItem('userToken'))
@@ -37327,9 +37319,9 @@ var render = function () {
                 },
                 [
                   _vm._v(
-                    "\n        " +
+                    "\n                " +
                       _vm._s(_vm.PostDetails.category.name) +
-                      "\n      "
+                      "\n            "
                   ),
                 ]
               )
@@ -37338,7 +37330,7 @@ var render = function () {
           _c("hr"),
           _vm._v(" "),
           _c("p", [
-            _vm._v("\n        Posted on\n        "),
+            _vm._v("\n                Posted on\n                "),
             _c("strong", { staticClass: "badge badge-primary p-1" }, [
               _vm._v(_vm._s(_vm.PostDetails.added_at)),
             ]),
@@ -37347,7 +37339,7 @@ var render = function () {
               _c("strong", { staticClass: "badge badge-info p-1" }, [
                 _vm._v(_vm._s(_vm.comments.length)),
               ]),
-              _vm._v("\n          comments"),
+              _vm._v("\n                    comments"),
             ]),
           ]),
           _vm._v(" "),
@@ -37361,7 +37353,9 @@ var render = function () {
           _vm._v(" "),
           _c("hr"),
           _vm._v(" "),
-          _vm._v("\n      " + _vm._s(_vm.PostDetails.body) + "\n      "),
+          _vm._v(
+            "\n            " + _vm._s(_vm.PostDetails.body) + "\n            "
+          ),
           _c("hr"),
           _vm._v(" "),
           _c("div", { staticClass: "card my-4" }, [
@@ -37449,7 +37443,11 @@ var render = function () {
                 _c("h5", { staticClass: "mt-0" }, [
                   _vm._v(_vm._s(comment.user.name)),
                 ]),
-                _vm._v("\n          " + _vm._s(comment.body) + "\n        "),
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(comment.body) +
+                    "\n                "
+                ),
               ]),
             ])
           }),
