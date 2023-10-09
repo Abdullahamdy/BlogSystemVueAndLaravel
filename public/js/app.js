@@ -6044,87 +6044,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -6135,7 +6054,8 @@ __webpack_require__.r(__webpack_exports__);
       title: "",
       body: "",
       image: "",
-      category: ""
+      category: "",
+      postSelected: []
     };
   },
   components: {
@@ -6146,26 +6066,51 @@ __webpack_require__.r(__webpack_exports__);
     this.getCategory();
   },
   methods: {
-    getposts: function getposts(page) {
+    selectAll: function selectAll(event) {
       var _this = this;
+      if (event.target.checked) {
+        $('input[type="checkbox"]').prop('checked', true);
+        this.posts.data.forEach(function (p) {
+          _this.postSelected.push(p.id);
+        });
+      } else {
+        $('input[type="checkbox"]').prop('checked', false);
+        this.postSelected = [];
+      }
+    },
+    postsSelect: function postsSelect(post, event) {
+      var index = this.postSelected.indexOf(post.id);
+      if (index > -1) {
+        this.postSelected.splice(index, 1);
+        event.target.checked = false;
+      } else {
+        this.postSelected.push(post.id);
+        event.target.checked = true;
+      }
+    },
+    deletepost: function deletepost() {
+      console.log(this.postSelected);
+    },
+    getposts: function getposts(page) {
+      var _this2 = this;
       axios.get("/api/admin/posts?page=" + page).then(function (res) {
-        _this.posts = res.data;
-        localStorage.setItem("posts", JSON.stringify(_this.posts));
+        _this2.posts = res.data;
+        localStorage.setItem("posts", JSON.stringify(_this2.posts));
       }).then(function (err) {
         return console.log(err);
       });
     },
     getCategory: function getCategory() {
-      var _this2 = this;
+      var _this3 = this;
       axios.get("/api/admin/categories").then(function (res) {
-        _this2.categories = res.data;
+        _this3.categories = res.data;
       }).then(function (err) {});
     },
     onImageChange: function onImageChange(event) {
       this.image = event.target.files[0];
     },
     addPost: function addPost() {
-      var _this3 = this;
+      var _this4 = this;
       var config = {
         headers: {
           "content-type": "multipart/form-data"
@@ -6177,10 +6122,10 @@ __webpack_require__.r(__webpack_exports__);
       formdata.append("image", this.image);
       formdata.append("category", this.category);
       axios.post("/api/admin/addpost", formdata, config).then(function (res) {
-        _this3.title = "";
-        _this3.category = "";
-        _this3.body = "";
-        _this3.image = "";
+        _this4.title = "";
+        _this4.category = "";
+        _this4.body = "";
+        _this4.image = "";
         $("#addPostModal").modal("hide");
         $(".modal-backdrop").css("display", "none");
       });
@@ -11063,7 +11008,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n#cont[data-v-c084d324] {\n  color: #566787;\n  background: #f5f5f5;\n  font-family: \"Varela Round\", sans-serif;\n  font-size: 13px;\n}\n.table-wrapper[data-v-c084d324] {\n  background: #fff;\n  padding: 20px 25px;\n  margin: 30px 0;\n  border-radius: 3px;\n  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);\n}\n.table-title[data-v-c084d324] {\n  padding-bottom: 15px;\n  background: #435d7d;\n  color: #fff;\n  padding: 16px 30px;\n  margin: -20px -25px 10px;\n  border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-c084d324] {\n  margin: 5px 0 0;\n  font-size: 24px;\n}\n.table-title .btn-group[data-v-c084d324] {\n  float: right;\n}\n.table-title .btn[data-v-c084d324] {\n  color: #fff;\n  float: right;\n  font-size: 13px;\n  border: none;\n  min-width: 50px;\n  border-radius: 2px;\n  border: none;\n  outline: none !important;\n  margin-left: 10px;\n}\n.table-title .btn i[data-v-c084d324] {\n  float: left;\n  font-size: 21px;\n  margin-right: 5px;\n}\n.table-title .btn span[data-v-c084d324] {\n  float: left;\n  margin-top: 2px;\n}\ntable.table tr th[data-v-c084d324],\ntable.table tr td[data-v-c084d324] {\n  border-color: #e9e9e9;\n  padding: 12px 15px;\n  vertical-align: middle;\n}\ntable.table tr th[data-v-c084d324]:first-child {\n  width: 60px;\n}\ntable.table tr th[data-v-c084d324]:last-child {\n  width: 100px;\n}\ntable.table-striped tbody tr[data-v-c084d324]:nth-of-type(odd) {\n  background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-c084d324]:hover {\n  background: #f5f5f5;\n}\ntable.table th i[data-v-c084d324] {\n  font-size: 13px;\n  margin: 0 5px;\n  cursor: pointer;\n}\ntable.table td:last-child i[data-v-c084d324] {\n  opacity: 0.9;\n  font-size: 22px;\n  margin: 0 5px;\n}\ntable.table td a[data-v-c084d324] {\n  font-weight: bold;\n  color: #566787;\n  display: inline-block;\n  text-decoration: none;\n  outline: none !important;\n}\ntable.table td a[data-v-c084d324]:hover {\n  color: #2196f3;\n}\ntable.table td a.edit[data-v-c084d324] {\n  color: #ffc107;\n}\ntable.table td a.delete[data-v-c084d324] {\n  color: #f44336;\n}\ntable.table td i[data-v-c084d324] {\n  font-size: 19px;\n}\ntable.table .avatar[data-v-c084d324] {\n  border-radius: 50%;\n  vertical-align: middle;\n  margin-right: 10px;\n}\n.pagination[data-v-c084d324] {\n  float: right;\n  margin: 0 0 5px;\n}\n.pagination li a[data-v-c084d324] {\n  border: none;\n  font-size: 13px;\n  min-width: 30px;\n  min-height: 30px;\n  color: #999;\n  margin: 0 2px;\n  line-height: 30px;\n  border-radius: 2px !important;\n  text-align: center;\n  padding: 0 6px;\n}\n.pagination li a[data-v-c084d324]:hover {\n  color: #666;\n}\n.pagination li.active a[data-v-c084d324],\n.pagination li.active a.page-link[data-v-c084d324] {\n  background: #03a9f4;\n}\n.pagination li.active a[data-v-c084d324]:hover {\n  background: #0397d6;\n}\n.pagination li.disabled i[data-v-c084d324] {\n  color: #ccc;\n}\n.pagination li i[data-v-c084d324] {\n  font-size: 16px;\n  padding-top: 6px;\n}\n.hint-text[data-v-c084d324] {\n  float: left;\n  margin-top: 10px;\n  font-size: 13px;\n}\n/* Custom checkbox */\n.custom-checkbox[data-v-c084d324] {\n  position: relative;\n}\n.custom-checkbox input[type=\"checkbox\"][data-v-c084d324] {\n  opacity: 0;\n  position: absolute;\n  margin: 5px 0 0 3px;\n  z-index: 9;\n}\n.custom-checkbox label[data-v-c084d324]:before {\n  width: 18px;\n  height: 18px;\n}\n.custom-checkbox label[data-v-c084d324]:before {\n  content: \"\";\n  margin-right: 10px;\n  display: inline-block;\n  vertical-align: text-top;\n  background: white;\n  border: 1px solid #bbb;\n  border-radius: 2px;\n  box-sizing: border-box;\n  z-index: 2;\n}\n.custom-checkbox input[type=\"checkbox\"]:checked + label[data-v-c084d324]:after {\n  content: \"\";\n  position: absolute;\n  left: 6px;\n  top: 3px;\n  width: 6px;\n  height: 11px;\n  border: solid #000;\n  border-width: 0 3px 3px 0;\n  transform: inherit;\n  z-index: 3;\n  transform: rotateZ(45deg);\n}\n.custom-checkbox input[type=\"checkbox\"]:checked + label[data-v-c084d324]:before {\n  border-color: #03a9f4;\n  background: #03a9f4;\n}\n.custom-checkbox input[type=\"checkbox\"]:checked + label[data-v-c084d324]:after {\n  border-color: #fff;\n}\n.custom-checkbox input[type=\"checkbox\"]:disabled + label[data-v-c084d324]:before {\n  color: #b8b8b8;\n  cursor: auto;\n  box-shadow: none;\n  background: #ddd;\n}\n/* Modal styles */\n.modal .modal-dialog[data-v-c084d324] {\n  max-width: 400px;\n}\n.modal .modal-header[data-v-c084d324],\n.modal .modal-body[data-v-c084d324],\n.modal .modal-footer[data-v-c084d324] {\n  padding: 20px 30px;\n}\n.modal .modal-content[data-v-c084d324] {\n  border-radius: 3px;\n}\n.modal .modal-footer[data-v-c084d324] {\n  background: #ecf0f1;\n  border-radius: 0 0 3px 3px;\n}\n.modal .modal-title[data-v-c084d324] {\n  display: inline-block;\n}\n.modal .form-control[data-v-c084d324] {\n  border-radius: 2px;\n  box-shadow: none;\n  border-color: #dddddd;\n}\n.modal textarea.form-control[data-v-c084d324] {\n  resize: vertical;\n}\n.modal .btn[data-v-c084d324] {\n  border-radius: 2px;\n  min-width: 100px;\n}\n.modal form label[data-v-c084d324] {\n  font-weight: normal;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n#cont[data-v-c084d324] {\n    color: #566787;\n    background: #f5f5f5;\n    font-family: \"Varela Round\", sans-serif;\n    font-size: 13px;\n}\n.table-wrapper[data-v-c084d324] {\n    background: #fff;\n    padding: 20px 25px;\n    margin: 30px 0;\n    border-radius: 3px;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);\n}\n.table-title[data-v-c084d324] {\n    padding-bottom: 15px;\n    background: #435d7d;\n    color: #fff;\n    padding: 16px 30px;\n    margin: -20px -25px 10px;\n    border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-c084d324] {\n    margin: 5px 0 0;\n    font-size: 24px;\n}\n.table-title .btn-group[data-v-c084d324] {\n    float: right;\n}\n.table-title .btn[data-v-c084d324] {\n    color: #fff;\n    float: right;\n    font-size: 13px;\n    border: none;\n    min-width: 50px;\n    border-radius: 2px;\n    border: none;\n    outline: none !important;\n    margin-left: 10px;\n}\n.table-title .btn i[data-v-c084d324] {\n    float: left;\n    font-size: 21px;\n    margin-right: 5px;\n}\n.table-title .btn span[data-v-c084d324] {\n    float: left;\n    margin-top: 2px;\n}\ntable.table tr th[data-v-c084d324],\ntable.table tr td[data-v-c084d324] {\n    border-color: #e9e9e9;\n    padding: 12px 15px;\n    vertical-align: middle;\n}\ntable.table tr th[data-v-c084d324]:first-child {\n    width: 60px;\n}\ntable.table tr th[data-v-c084d324]:last-child {\n    width: 100px;\n}\ntable.table-striped tbody tr[data-v-c084d324]:nth-of-type(odd) {\n    background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-c084d324]:hover {\n    background: #f5f5f5;\n}\ntable.table th i[data-v-c084d324] {\n    font-size: 13px;\n    margin: 0 5px;\n    cursor: pointer;\n}\ntable.table td:last-child i[data-v-c084d324] {\n    opacity: 0.9;\n    font-size: 22px;\n    margin: 0 5px;\n}\ntable.table td a[data-v-c084d324] {\n    font-weight: bold;\n    color: #566787;\n    display: inline-block;\n    text-decoration: none;\n    outline: none !important;\n}\ntable.table td a[data-v-c084d324]:hover {\n    color: #2196f3;\n}\ntable.table td a.edit[data-v-c084d324] {\n    color: #ffc107;\n}\ntable.table td a.delete[data-v-c084d324] {\n    color: #f44336;\n}\ntable.table td i[data-v-c084d324] {\n    font-size: 19px;\n}\ntable.table .avatar[data-v-c084d324] {\n    border-radius: 50%;\n    vertical-align: middle;\n    margin-right: 10px;\n}\n.pagination[data-v-c084d324] {\n    float: right;\n    margin: 0 0 5px;\n}\n.pagination li a[data-v-c084d324] {\n    border: none;\n    font-size: 13px;\n    min-width: 30px;\n    min-height: 30px;\n    color: #999;\n    margin: 0 2px;\n    line-height: 30px;\n    border-radius: 2px !important;\n    text-align: center;\n    padding: 0 6px;\n}\n.pagination li a[data-v-c084d324]:hover {\n    color: #666;\n}\n.pagination li.active a[data-v-c084d324],\n.pagination li.active a.page-link[data-v-c084d324] {\n    background: #03a9f4;\n}\n.pagination li.active a[data-v-c084d324]:hover {\n    background: #0397d6;\n}\n.pagination li.disabled i[data-v-c084d324] {\n    color: #ccc;\n}\n.pagination li i[data-v-c084d324] {\n    font-size: 16px;\n    padding-top: 6px;\n}\n.hint-text[data-v-c084d324] {\n    float: left;\n    margin-top: 10px;\n    font-size: 13px;\n}\n\n/* Custom checkbox */\n.custom-checkbox[data-v-c084d324] {\n    position: relative;\n}\n.custom-checkbox input[type=\"checkbox\"][data-v-c084d324] {\n    opacity: 0;\n    position: absolute;\n    margin: 5px 0 0 3px;\n    z-index: 9;\n}\n.custom-checkbox label[data-v-c084d324]:before {\n    width: 18px;\n    height: 18px;\n}\n.custom-checkbox label[data-v-c084d324]:before {\n    content: \"\";\n    margin-right: 10px;\n    display: inline-block;\n    vertical-align: text-top;\n    background: white;\n    border: 1px solid #bbb;\n    border-radius: 2px;\n    box-sizing: border-box;\n    z-index: 2;\n}\n.custom-checkbox input[type=\"checkbox\"]:checked+label[data-v-c084d324]:after {\n    content: \"\";\n    position: absolute;\n    left: 6px;\n    top: 3px;\n    width: 6px;\n    height: 11px;\n    border: solid #000;\n    border-width: 0 3px 3px 0;\n    transform: inherit;\n    z-index: 3;\n    transform: rotateZ(45deg);\n}\n.custom-checkbox input[type=\"checkbox\"]:checked+label[data-v-c084d324]:before {\n    border-color: #03a9f4;\n    background: #03a9f4;\n}\n.custom-checkbox input[type=\"checkbox\"]:checked+label[data-v-c084d324]:after {\n    border-color: #fff;\n}\n.custom-checkbox input[type=\"checkbox\"]:disabled+label[data-v-c084d324]:before {\n    color: #b8b8b8;\n    cursor: auto;\n    box-shadow: none;\n    background: #ddd;\n}\n\n/* Modal styles */\n.modal .modal-dialog[data-v-c084d324] {\n    max-width: 400px;\n}\n.modal .modal-header[data-v-c084d324],\n.modal .modal-body[data-v-c084d324],\n.modal .modal-footer[data-v-c084d324] {\n    padding: 20px 30px;\n}\n.modal .modal-content[data-v-c084d324] {\n    border-radius: 3px;\n}\n.modal .modal-footer[data-v-c084d324] {\n    background: #ecf0f1;\n    border-radius: 0 0 3px 3px;\n}\n.modal .modal-title[data-v-c084d324] {\n    display: inline-block;\n}\n.modal .form-control[data-v-c084d324] {\n    border-radius: 2px;\n    box-shadow: none;\n    border-color: #dddddd;\n}\n.modal textarea.form-control[data-v-c084d324] {\n    resize: vertical;\n}\n.modal .btn[data-v-c084d324] {\n    border-radius: 2px;\n    min-width: 100px;\n}\n.modal form label[data-v-c084d324] {\n    font-weight: normal;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -31569,17 +31514,113 @@ var render = function () {
     [
       _c("div", {}, [
         _c("div", { staticClass: "table-wrapper" }, [
-          _vm._m(0),
+          _c("div", { staticClass: "table-title" }, [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-sm-6" }, [
+                _vm._m(1),
+                _vm._v(" "),
+                _vm.postSelected.length
+                  ? _c(
+                      "a",
+                      {
+                        staticClass: "btn btn-danger",
+                        attrs: {
+                          href: "#deletePostModal",
+                          "data-toggle": "modal",
+                        },
+                      },
+                      [
+                        _c("i", { staticClass: "material-icons" }, [
+                          _vm._v(""),
+                        ]),
+                        _vm._v(" "),
+                        _c("span", [_vm._v("Delete")]),
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                !_vm.postSelected.length
+                  ? _c(
+                      "a",
+                      {
+                        staticClass: "btn btn-danger",
+                        attrs: {
+                          href: "#deletePostModalnopost",
+                          "data-toggle": "modal",
+                        },
+                      },
+                      [
+                        _c("i", { staticClass: "material-icons" }, [
+                          _vm._v(""),
+                        ]),
+                        _vm._v(" "),
+                        _c("span", [_vm._v("Delete")]),
+                      ]
+                    )
+                  : _vm._e(),
+              ]),
+            ]),
+          ]),
           _vm._v(" "),
           _c("table", { staticClass: "table table-striped table-hover" }, [
-            _vm._m(1),
+            _c("thead", [
+              _c("tr", [
+                _c("th", [
+                  _c("span", { staticClass: "custom-checkbox" }, [
+                    _c("input", {
+                      attrs: { type: "checkbox", id: "selectAll" },
+                      on: {
+                        click: function ($event) {
+                          return _vm.selectAll($event)
+                        },
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("label", { attrs: { for: "selectAll" } }),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _c("th", [_vm._v("Title")]),
+                _vm._v(" "),
+                _c("th", [_vm._v("Body")]),
+                _vm._v(" "),
+                _c("th", [_vm._v("Category")]),
+                _vm._v(" "),
+                _c("th", [_vm._v("Image")]),
+                _vm._v(" "),
+                _c("th", [_vm._v("User")]),
+                _vm._v(" "),
+                _c("th", [_vm._v("Action")]),
+              ]),
+            ]),
             _vm._v(" "),
             _vm.posts.data
               ? _c(
                   "tbody",
                   _vm._l(_vm.posts.data, function (post, index) {
                     return _c("tr", { key: index }, [
-                      _vm._m(2, true),
+                      _c("td", [
+                        _c("span", { staticClass: "custom-checkbox" }, [
+                          _c("input", {
+                            attrs: {
+                              type: "checkbox",
+                              id: "checkbox1" + index,
+                              name: "options[]",
+                              value: "1",
+                            },
+                            on: {
+                              click: function ($event) {
+                                $event.stopPropagation()
+                                return _vm.postsSelect(post, $event)
+                              },
+                            },
+                          }),
+                          _vm._v(" "),
+                          _c("label", { attrs: { for: "checkbox1" + index } }),
+                        ]),
+                      ]),
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(post.title))]),
                       _vm._v(" "),
@@ -31638,7 +31679,7 @@ var render = function () {
                             ]
                           ),
                           _vm._v(" "),
-                          _vm._m(3, true),
+                          _vm._m(2, true),
                           _vm._v(" "),
                           _c(
                             "router-link",
@@ -31676,7 +31717,7 @@ var render = function () {
             "div",
             { staticClass: "clearfix" },
             [
-              _vm._m(4),
+              _vm._m(3),
               _vm._v(" "),
               _c("pagination", {
                 attrs: { data: _vm.posts },
@@ -31692,7 +31733,7 @@ var render = function () {
         _c("div", { staticClass: "modal-dialog" }, [
           _c("div", { staticClass: "modal-content" }, [
             _c("form", { attrs: { enctype: "multipart/form-data" } }, [
-              _vm._m(5),
+              _vm._m(4),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("div", { staticClass: "form-group" }, [
@@ -31792,9 +31833,9 @@ var render = function () {
                           { key: index, domProps: { value: category.id } },
                           [
                             _vm._v(
-                              "\n                  " +
+                              "\n                                    " +
                                 _vm._s(category.name) +
-                                "\n                "
+                                "\n                                "
                             ),
                           ]
                         )
@@ -31843,7 +31884,56 @@ var render = function () {
       _vm._v(" "),
       _c("editpost"),
       _vm._v(" "),
-      _vm._m(6),
+      _c(
+        "div",
+        { staticClass: "modal fade", attrs: { id: "deletePostModal" } },
+        [
+          _c("div", { staticClass: "modal-dialog" }, [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("form", [
+                _vm._m(5),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-body" }, [
+                  _c("p", [
+                    _vm._v("Are you sure you want to delete these Records?"),
+                  ]),
+                  _vm._v(" "),
+                  _vm._m(6),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "text-warning" }, [
+                    _c("small", [
+                      _vm._v("Selected Posts : "),
+                      _c("strong", [_vm._v(_vm._s(this.postSelected.length))]),
+                    ]),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-footer" }, [
+                  _c("input", {
+                    staticClass: "btn btn-default",
+                    attrs: {
+                      type: "button",
+                      "data-dismiss": "modal",
+                      value: "Cancel",
+                    },
+                  }),
+                  _vm._v(" "),
+                  _c("input", {
+                    staticClass: "btn btn-danger",
+                    attrs: { type: "submit", value: "Delete" },
+                    on: {
+                      click: function ($event) {
+                        $event.preventDefault()
+                        return _vm.deletepost.apply(null, arguments)
+                      },
+                    },
+                  }),
+                ]),
+              ]),
+            ]),
+          ]),
+        ]
+      ),
       _vm._v(" "),
       _vm._m(7),
     ],
@@ -31855,96 +31945,26 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "table-title" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-sm-6" }, [
-          _c("h2", [_vm._v("Manage "), _c("b", [_vm._v("Posts")])]),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-sm-6" }, [
-          _c(
-            "a",
-            {
-              staticClass: "btn btn-success",
-              attrs: { href: "#addPostModal", "data-toggle": "modal" },
-            },
-            [
-              _c("i", { staticClass: "material-icons" }, [_vm._v("")]),
-              _vm._v(" "),
-              _c("span", [_vm._v("Add New Post")]),
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "btn btn-danger",
-              attrs: { href: "#deletePostModal", "data-toggle": "modal" },
-            },
-            [
-              _c("i", { staticClass: "material-icons" }, [_vm._v("")]),
-              _vm._v(" "),
-              _c("span", [_vm._v("Delete")]),
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "btn btn-danger",
-              attrs: { href: "#deletePostModalnopost", "data-toggle": "modal" },
-            },
-            [
-              _c("i", { staticClass: "material-icons" }, [_vm._v("")]),
-              _vm._v(" "),
-              _c("span", [_vm._v("Delete")]),
-            ]
-          ),
-        ]),
-      ]),
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("h2", [_vm._v("Manage "), _c("b", [_vm._v("Posts")])]),
     ])
   },
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [
-          _c("span", { staticClass: "custom-checkbox" }, [
-            _c("input", { attrs: { type: "checkbox", id: "selectAll" } }),
-            _vm._v(" "),
-            _c("label", { attrs: { for: "selectAll" } }),
-          ]),
-        ]),
+    return _c(
+      "a",
+      {
+        staticClass: "btn btn-success",
+        attrs: { href: "#addPostModal", "data-toggle": "modal" },
+      },
+      [
+        _c("i", { staticClass: "material-icons" }, [_vm._v("")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Title")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Body")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Category")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Image")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("User")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Action")]),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", [
-      _c("span", { staticClass: "custom-checkbox" }, [
-        _c("input", {
-          attrs: { type: "checkbox", name: "options[]", value: "1" },
-        }),
-        _vm._v(" "),
-        _c("label"),
-      ]),
-    ])
+        _c("span", [_vm._v("Add New Post")]),
+      ]
+    )
   },
   function () {
     var _vm = this
@@ -31997,7 +32017,7 @@ var staticRenderFns = [
             "aria-hidden": "true",
           },
         },
-        [_vm._v("\n              ×\n            ")]
+        [_vm._v("\n                            ×\n                        ")]
       ),
     ])
   },
@@ -32005,69 +32025,30 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "modal fade", attrs: { id: "deletePostModal" } },
-      [
-        _c("div", { staticClass: "modal-dialog" }, [
-          _c("div", { staticClass: "modal-content" }, [
-            _c("form", [
-              _c("div", { staticClass: "modal-header" }, [
-                _c("h4", { staticClass: "modal-title" }, [
-                  _vm._v("Delete Post"),
-                ]),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "close",
-                    attrs: {
-                      type: "button",
-                      "data-dismiss": "modal",
-                      "aria-hidden": "true",
-                    },
-                  },
-                  [_vm._v("\n              ×\n            ")]
-                ),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-body" }, [
-                _c("p", [
-                  _vm._v("Are you sure you want to delete these Records?"),
-                ]),
-                _vm._v(" "),
-                _c("p", { staticClass: "text-warning" }, [
-                  _c("small", [_vm._v("This action cannot be undone.")]),
-                ]),
-                _vm._v(" "),
-                _c("p", { staticClass: "text-warning" }, [
-                  _c("small", [
-                    _vm._v("Selected Posts : "),
-                    _c("strong", [_vm._v("4")]),
-                  ]),
-                ]),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-footer" }, [
-                _c("input", {
-                  staticClass: "btn btn-default",
-                  attrs: {
-                    type: "button",
-                    "data-dismiss": "modal",
-                    value: "Cancel",
-                  },
-                }),
-                _vm._v(" "),
-                _c("input", {
-                  staticClass: "btn btn-danger",
-                  attrs: { type: "submit", value: "Delete" },
-                }),
-              ]),
-            ]),
-          ]),
-        ]),
-      ]
-    )
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h4", { staticClass: "modal-title" }, [_vm._v("Delete Post")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-hidden": "true",
+          },
+        },
+        [_vm._v("\n                            ×\n                        ")]
+      ),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { staticClass: "text-warning" }, [
+      _c("small", [_vm._v("This action cannot be undone.")]),
+    ])
   },
   function () {
     var _vm = this
@@ -32095,7 +32076,11 @@ var staticRenderFns = [
                       "aria-hidden": "true",
                     },
                   },
-                  [_vm._v("\n              ×\n            ")]
+                  [
+                    _vm._v(
+                      "\n                            ×\n                        "
+                    ),
+                  ]
                 ),
               ]),
               _vm._v(" "),
