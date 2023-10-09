@@ -6393,6 +6393,9 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
       if (pusher && pusher.config && pusher.config.auth && pusher.config.auth.headers) {
         pusher.config.auth.headers.Authorization = "Bearer ".concat(state.userToken);
       }
+      Echo["private"]('App.Models.User.' + state.user.id).notification(function (notification) {
+        console.log('notif', notification);
+      });
     },
     logOut: function logOut(state) {
       state.userToken;

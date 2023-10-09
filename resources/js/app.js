@@ -76,6 +76,10 @@ const store = new Vuex.Store({
             if (pusher && pusher.config && pusher.config.auth && pusher.config.auth.headers) {
               pusher.config.auth.headers.Authorization = `Bearer ${state.userToken}`;
             }
+            Echo.private('App.Models.User.' + state.user.id)
+            .notification((notification) => {
+                console.log('notif',notification);
+            });
           },
         logOut(state){
             state.userToken ;
