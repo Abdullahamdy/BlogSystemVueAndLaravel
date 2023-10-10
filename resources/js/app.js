@@ -41,6 +41,7 @@ const store = new Vuex.Store({
         userToken: null,
         user: null,
         EditedPost:{},
+        notification:[],
     },
     getters: {
         isLogged(state) {
@@ -78,6 +79,7 @@ const store = new Vuex.Store({
             }
             Echo.private('App.Models.User.' + state.user.id)
             .notification((notification) => {
+                state.notification.unshift(notification)
                 console.log('notif',notification);
             });
           },

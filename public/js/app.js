@@ -5465,7 +5465,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  computed: {
+    notifications: function notifications() {
+      return this.$store.state.notification;
+    }
+  },
+  methods: {
+    getnotifications: function getnotifications() {}
+  },
+  created: function created() {
+    this.getnotifications();
+  }
+});
 
 /***/ }),
 
@@ -6407,7 +6419,8 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
   state: {
     userToken: null,
     user: null,
-    EditedPost: {}
+    EditedPost: {},
+    notification: []
   },
   getters: {
     isLogged: function isLogged(state) {
@@ -6441,6 +6454,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
         pusher.config.auth.headers.Authorization = "Bearer ".concat(state.userToken);
       }
       Echo["private"]('App.Models.User.' + state.user.id).notification(function (notification) {
+        state.notification.unshift(notification);
         console.log('notif', notification);
       });
     },
@@ -37321,63 +37335,77 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "dropdown" }, [
+    _c("button", { staticClass: "dropbtn" }, [
+      _c("i", { staticClass: "fa fa-bell" }),
+      _vm._v(" "),
+      _c("span", { staticClass: "badge badge-danger" }, [
+        _vm._v(_vm._s(_vm.notifications.length)),
+      ]),
+      _vm._v(" "),
+      _c("i", { staticClass: "fa fa-caret-down" }),
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "dropdown-content" },
+      [
+        _vm._l(_vm.notifications, function (n, i) {
+          return _c("div", { key: i, staticClass: "media p-2" }, [
+            _c("img", {
+              staticClass: "mr-2",
+              staticStyle: { height: "60px", width: "60px" },
+              attrs: {
+                src: "https://www.kindpng.com/picc/m/495-4952535_create-digital-profile-icon-blue-user-profile-icon.png",
+                alt: "commenter image",
+              },
+            }),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "media-body" },
+              [
+                _c("div", { staticClass: "mt-0" }, [
+                  _c("strong", [_vm._v(_vm._s(n.data.comment_owner.name))]),
+                  _vm._v(" added a comment on your post"),
+                ]),
+                _vm._v(" "),
+                _c(
+                  "router-link",
+                  {
+                    staticClass: "p-0",
+                    attrs: { to: "/post" + n.data.post.slug, target: "_blank" },
+                  },
+                  [_vm._v(_vm._s(n.data.post.title))]
+                ),
+                _vm._v(" "),
+                _c("p", { staticClass: "m-0" }, [
+                  _c("i", { staticClass: "fa fa-clock-o mr-1" }),
+                  _vm._v(" " + _vm._s(n.data.commented_at) + " "),
+                ]),
+              ],
+              1
+            ),
+          ])
+        }),
+        _vm._v(" "),
+        _vm._m(0),
+      ],
+      2
+    ),
+  ])
 }
 var staticRenderFns = [
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "dropdown" }, [
-      _c("button", { staticClass: "dropbtn" }, [
-        _c("i", { staticClass: "fa fa-bell" }),
-        _vm._v(" "),
-        _c("span", { staticClass: "badge badge-danger" }, [_vm._v("1")]),
-        _vm._v(" "),
-        _c("i", { staticClass: "fa fa-caret-down" }),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "dropdown-content" }, [
-        _c("div", { staticClass: "media p-2" }, [
-          _c("img", {
-            staticClass: "mr-2",
-            staticStyle: { height: "60px", width: "60px" },
-            attrs: {
-              src: "https://www.kindpng.com/picc/m/495-4952535_create-digital-profile-icon-blue-user-profile-icon.png",
-              alt: "commenter image",
-            },
-          }),
-          _vm._v(" "),
-          _c("div", { staticClass: "media-body" }, [
-            _c("div", { staticClass: "mt-0" }, [
-              _c("strong", [_vm._v("amine ayat")]),
-              _vm._v(" added a comment on your post"),
-            ]),
-            _vm._v(" "),
-            _c(
-              "a",
-              {
-                staticClass: "p-0",
-                attrs: { href: "/vue js", target: "_blank" },
-              },
-              [_vm._v("vue js tuto")]
-            ),
-            _vm._v(" "),
-            _c("p", { staticClass: "m-0" }, [
-              _c("i", { staticClass: "fa fa-clock-o mr-1" }),
-              _vm._v(" 1 hour ago"),
-            ]),
-          ]),
-        ]),
-        _vm._v(" "),
-        _c("div", [
-          _c(
-            "a",
-            { staticClass: "see-all", attrs: { href: "/admin/notifications" } },
-            [_c("i", { staticClass: "fa fa-bell-o mr-2" }), _vm._v("See All ")]
-          ),
-        ]),
-      ]),
+    return _c("div", [
+      _c(
+        "a",
+        { staticClass: "see-all", attrs: { href: "/admin/notifications" } },
+        [_c("i", { staticClass: "fa fa-bell-o mr-2" }), _vm._v("See All ")]
+      ),
     ])
   },
 ]

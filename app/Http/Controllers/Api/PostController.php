@@ -67,7 +67,7 @@ class PostController extends Controller
                     'id' => $comment->id,
                     'body' => $comment->body,
                     'user' => $comment->user,
-                    'added_at' => $comment->created_at->diffForHumans()
+                    'added_at' => $comment->created_at
                 ];
             })
 

@@ -37,7 +37,7 @@ class NotifyOwner extends Notification implements ShouldBroadcast
      */
     public function via($notifiable)
     {
-        return ['database','broadcast'];
+        return ['database', 'broadcast'];
     }
 
     /**
@@ -63,9 +63,9 @@ class NotifyOwner extends Notification implements ShouldBroadcast
     public function toArray($notifiable)
     {
         return [
-            'comment_owner'=>$this->comment_owner,
-            'commented_at'=>$this->commented_at,
-            'post'=>$this->post,
+            'comment_owner' => $this->comment_owner,
+            'commented_at' => $this->commented_at,
+            'post' => $this->post,
         ];
     }
 
@@ -73,9 +73,11 @@ class NotifyOwner extends Notification implements ShouldBroadcast
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            'comment_owner'=>$this->comment_owner,
-            'commented_at'=>$this->commented_at,
-            'post'=>$this->post,
+            'data' => [
+                'comment_owner' => $this->comment_owner,
+                'commented_at' => $this->commented_at,
+                'post' => $this->post,
+            ]
 
         ]);
     }

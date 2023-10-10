@@ -30,6 +30,6 @@ class CommentController extends Controller
             $post_owner->notify(new NotifyOwner($comment ,  $post));
         }
 
-        return response()->json(['id'=>$comment->id,'body'=>$comment->body,'user'=>$comment->user,'added_at'=>$comment->created_at->diffForHumans()]);
+        return response()->json(['id'=>$comment->id,'body'=>$comment->body,'user'=>$comment->user,'added_at'=>$comment->created_at]);
     }
 }

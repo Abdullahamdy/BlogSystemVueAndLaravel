@@ -2,16 +2,16 @@
 <div class="dropdown">
     <button class="dropbtn">
       <i class="fa fa-bell"></i>
-      <span class="badge badge-danger">1</span>
+      <span class="badge badge-danger">{{ notifications.length }}</span>
       <i class="fa fa-caret-down"></i>
     </button>
         <div class="dropdown-content">
-            <div class="media p-2">
-                <img class="mr-2" style="    height: 60px;width: 60px;" src="https://www.kindpng.com/picc/m/495-4952535_create-digital-profile-icon-blue-user-profile-icon.png" alt="commenter image">
+            <div class="media p-2" v-for="(n,i) in notifications" :key="i">
+                <img class="mr-2" style="height: 60px;width: 60px;" src="https://www.kindpng.com/picc/m/495-4952535_create-digital-profile-icon-blue-user-profile-icon.png" alt="commenter image">
                 <div class="media-body">
-                    <div class="mt-0"><strong>amine ayat</strong> added a comment on your post</div>
-                    <a class="p-0" href="/vue js" target="_blank">vue js tuto</a>
-                    <p class="m-0"><i class="fa fa-clock-o mr-1"></i> 1 hour ago</p>
+                    <div class="mt-0"><strong>{{ n.data.comment_owner.name }}</strong> added a comment on your post</div>
+                    <router-link class="p-0" :to="`/post${n.data.post.slug}`" target="_blank">{{ n.data.post.title }}</router-link>
+                    <p class="m-0"><i class="fa fa-clock-o mr-1"></i> {{ n.data.commented_at }} </p>
 
                 </div>
             </div>
@@ -25,6 +25,22 @@
 
 <script>
 export default {
+    computed:{
+        notifications(){
+          return   this.$store.state.notification;
+
+        }
+    },
+    methods:{
+        getnotifications(){
+
+        }
+
+    },
+    created() {
+        this.getnotifications();
+
+    },
 
 }
 </script>
