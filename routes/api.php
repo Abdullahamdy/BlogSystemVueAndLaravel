@@ -31,6 +31,9 @@ Route::get('getpost/{query}',[PostController::class,'getPost']);
 Route::middleware('auth:api')->group(function () {
     Route::get('user', [UserController::class,'details']);
     Route::post('comment/create', [CommentController::class,'store']);
+    Route::get('getUnreadNotifications', [UserController::class,'getUnreadNotifications']);
+    Route::get('getAllNotifications', [UserController::class,'getAllNotifications']);
+    Route::put('makeNotificationsRead', [UserController::class,'makeNotificationsRead']);
 
 });
 Route::group(['prefix'=>'/admin','middleware'=>'auth:api' ],function(){
